@@ -1,8 +1,14 @@
 intermediates := $(local-intermediates-dir)
 
-SRC := $(call my-dir)/include/$(addprefix vnd_, $(addsuffix .txt,$(basename $(TARGET_DEVICE))))
+ifneq (,$(LIBBT_VENDORFILE))
+        SRC := $(LIBBT_VENDORFILE)
+else
+        SRC := $(call my-dir)/include/$(addprefix vnd_, $(addsuffix .txt,$(basename $(TARGET_DEVICE))))
+endif
+
 ifeq (,$(wildcard $(SRC)))
 # configuration file does not exist. Use default one
+$(error using generic device for BBT. This is almost certainly wrong)
 SRC := $(call my-dir)/include/vnd_generic.txt
 endif
 GEN := $(intermediates)/vnd_buildcfg.h
